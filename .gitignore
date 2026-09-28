@@ -1,0 +1,6 @@
+.pio
+.idea
+
+cmake-build-*/
+secrets.h
+.DS_Store
