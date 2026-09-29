@@ -1,8 +1,28 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <Adafruit_SSD1306.h>
+#include <optional>
 
 namespace {
+  Adafruit_SSD1306 display(128, 64, &Wire, -1);
+  constexpr uint8_t OLED_ADDRS[] = {0x3C, 0x3D};
+
+  bool i2cDevicePresent(uint8_t addr) {
+    Wire.beginTransmission(addr);
+
+    return Wire.endTransmission() == 0;
+  }
+
+  std::optional<uint8_t> findOledAddr() {
+    for (uint8_t addr : OLED_ADDRS) {
+      if (i2cDevicePresent(addr)) {
+        return addr;
+      }
+    }
+
+    return std::nullopt;
+  }
+
   void scanI2C() {
     Serial.println();
     Serial.println("I2C scaner");
@@ -10,9 +30,8 @@ namespace {
     uint8_t found = 0;
 
     for (uint8_t addr = 1; addr < 127; addr++) {
-      Wire.beginTransmission(addr);
-      const uint8_t status = Wire.endTransmission();
-      if (status == 0) {
+
+      if (i2cDevicePresent(addr)) {
         found++;
         Serial.printf("Found at address 0x%02X\n", addr);
       }
@@ -27,7 +46,6 @@ namespace {
     Serial.println("Scan done");
   }
 
-  Adafruit_SSD1306 display(128, 64, &Wire, -1);
 }
 
 void setup() {
@@ -37,8 +55,15 @@ void setup() {
 
   scanI2C();
 
-  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-    Serial.println("OLED init failed!");
+  const auto addr = findOledAddr();
+
+  if (!addr) {
+    Serial.println("No I2C device found.");
+    return;
+  }
+
+  if (!display.begin(SSD1306_SWITCHCAPVCC, *addr)) {
+    Serial.println("OLED not found (tried 0x3C, 0x3D)");
     return;
   }
 
