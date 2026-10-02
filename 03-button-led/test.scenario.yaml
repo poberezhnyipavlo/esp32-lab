@@ -1,0 +1,27 @@
+name: Button toggles LED
+version: 1
+author: Pavlo
+
+steps:
+  - wait-serial: 'Ready'
+
+  - set-control:
+      part-id: btn1
+      control: pressed
+      value: 1
+  - wait-serial: 'Press 1: LED ON'
+  - set-control:
+      part-id: btn1
+      control: pressed
+      value: 0
+  - delay: 200ms
+
+  - set-control:
+      part-id: btn1
+      control: pressed
+      value: 1
+  - wait-serial: 'Press 2: LED OFF'
+  - set-control:
+      part-id: btn1
+      control: pressed
+      value: 0
