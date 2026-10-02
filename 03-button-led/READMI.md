@@ -1,8 +1,12 @@
-# 03 — Button → LED (debounced)
+# 03 — Button → LED (debounced, short / long press)
 
-Press the button to toggle an LED. The button is debounced in software
-by a small `Debouncer` class that has no Arduino dependency, so it is
-unit-tested on the host with GoogleTest.
+Short press toggles an LED, long press (≥ 1 s) prints `Long press`
+and does not toggle. Logic is split into two pure classes with no
+Arduino dependency, both unit-tested on the host with GoogleTest:
+
+- `Debouncer` — filters contact bounce, exposes the stable state via `isPressed()`.
+- `PressDetector` — turns the stable state + time into events:
+  `None`, `Short` (on release, before 1 s), `Long` (once, at 1 s while held).
 
 ## Hardware
 
@@ -18,13 +22,22 @@ No external pull-up resistor is needed.
 
 ## How it works
 
-- `Debouncer::update(raw, nowMs)` accepts a new state only after it has
-  been stable for 50 ms, and returns `true` exactly once per press.
-- Time is passed in as a parameter instead of calling `millis()` inside,
-  which keeps the class pure and testable.
-- Elapsed time is computed as `now - lastChange` on `uint32_t`, which
-  stays correct across the `millis()` overflow (~49 days).
+- Each `loop()` iteration: read pin → `Debouncer::update()` →
+  `PressDetector::update()` → `switch` on the event.
+- Both classes take time as a parameter instead of calling `millis()`,
+  which keeps them pure and testable.
+- Short press is reported on **release**: at the moment of pressing
+  it is not yet known whether the press will be long.
+- Elapsed time uses `uint32_t` subtraction, correct across the
+  `millis()` overflow (~49 days).
+- `PressDetector::update()` is `[[nodiscard]]`: ignoring the event is a bug.
 - `loop()` never calls `delay()`.
+
+## Verified
+
+- [x] Unit tests: 11/11 pass (Debouncer 6, PressDetector 5)
+- [x] Wokwi scenario passes
+- [x] Real board: ESP32 DevKit V1 (CH340C), 6 presses → 6 toggles, no double events
 
 ## Run
 

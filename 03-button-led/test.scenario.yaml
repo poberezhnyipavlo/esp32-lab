@@ -9,19 +9,44 @@ steps:
       part-id: btn1
       control: pressed
       value: 1
-  - wait-serial: 'Press 1: LED ON'
+  - delay: 200ms
   - set-control:
       part-id: btn1
       control: pressed
       value: 0
-  - delay: 200ms
+  - wait-serial: 'Press 1: LED ON'
 
   - set-control:
       part-id: btn1
       control: pressed
       value: 1
-  - wait-serial: 'Press 2: LED OFF'
+  - delay: 200ms
   - set-control:
       part-id: btn1
       control: pressed
       value: 0
+  - wait-serial: 'Press 2: LED OFF'
+
+  - delay: 200ms
+  - set-control:
+      part-id: btn1
+      control: pressed
+      value: 1
+  - wait-serial: 'Long press'
+  - set-control:
+      part-id: btn1
+      control: pressed
+      value: 0
+
+  - delay: 200ms
+  - set-control:
+      part-id: btn1
+      control: pressed
+      value: 1
+  - delay: 200ms
+  - set-control:
+      part-id: btn1
+      control: pressed
+      value: 0
+  - wait-serial: 'Press 3: LED ON'
+

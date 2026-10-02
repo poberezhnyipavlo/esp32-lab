@@ -6,9 +6,9 @@ class Debouncer {
 public:
   explicit Debouncer(uint32_t stable_ms);
 
-  bool update(bool raw, uint32_t now_ms);
+  void update(bool raw, uint32_t now_ms);
 
-  bool isPressed() const { return  stable_; };
+  [[nodiscard]] bool isPressed() const { return  stable_; };
 
 private:
   uint32_t stable_ms_;
