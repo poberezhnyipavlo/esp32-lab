@@ -1,0 +1,27 @@
+name: PIR alarm (PIR OUT emulated by a button)
+version: 1
+author: Pavlo
+steps:
+  - wait-serial: 'Ready'
+  # рух під час прогріву — ігнор
+  - set-control:
+      part-id: btn1
+      control: pressed
+      value: 1
+  - wait-serial: 'Motion ignored (warming up)'
+  - set-control:
+      part-id: btn1
+      control: pressed
+      value: 0
+  # після прогріву — тривога
+  - wait-serial: 'Armed'
+  - set-control:
+      part-id: btn1
+      control: pressed
+      value: 1
+  - wait-serial: 'Motion! event 1'
+  - set-control:
+      part-id: btn1
+      control: pressed
+      value: 0
+  - wait-serial: 'Alarm off'
