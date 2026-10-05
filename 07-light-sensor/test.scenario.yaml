@@ -1,0 +1,38 @@
+name: Night light with hysteresis
+version: 1
+author: Pavlo
+steps:
+  - wait-serial: 'Ready'
+  # світло: нічник вимкнений
+  - set-control:
+      part-id: ldr1
+      control: lux
+      value: 500
+  - delay: 700ms
+  - wait-serial: 'lamp=OFF,'
+  # темно: вмикається
+  - set-control:
+      part-id: ldr1
+      control: lux
+      value: 20
+  - wait-serial: 'Lamp ON'
+  # сутінки (смуга) після темряви: лишається ON
+  - set-control:
+      part-id: ldr1
+      control: lux
+      value: 70
+  - delay: 300ms
+  - wait-serial: 'lamp=ON,'
+  # світло: вимикається
+  - set-control:
+      part-id: ldr1
+      control: lux
+      value: 300
+  - wait-serial: 'Lamp OFF'
+  # ті самі сутінки після світла: лишається OFF
+  - set-control:
+      part-id: ldr1
+      control: lux
+      value: 70
+  - delay: 300ms
+  - wait-serial: 'lamp=OFF,'
