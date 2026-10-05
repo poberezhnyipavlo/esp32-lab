@@ -1,0 +1,11 @@
+name: Wi-Fi connect (Wokwi-GUEST)
+version: 1
+author: Pavlo
+steps:
+  - wait-serial: 'Scan:'
+  - wait-serial: 'Wokwi-GUEST'
+  - wait-serial: 'Ready'
+  - wait-serial: 'Connecting to Wokwi-GUEST (attempt 1)'
+  - wait-serial: 'Connected to Wokwi-GUEST'
+  - wait-serial: 'IP: 10.'
+  - wait-serial: 'Status: connected'
