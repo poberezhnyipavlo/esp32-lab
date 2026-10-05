@@ -1,0 +1,42 @@
+name: Relay basics (active-LOW, safety rules)
+version: 1
+author: Pavlo
+steps:
+  - wait-serial: 'Ready'
+  # після старту обидва реле вимкнені: active-LOW → пін HIGH
+  - expect-pin: { part-id: esp, pin: 26, value: 1 }
+  - expect-pin: { part-id: esp, pin: 27, value: 1 }
+
+  # увімкнути канал 1 → пін LOW
+  - write-serial: "1 on\n"
+  - wait-serial: 'Relay 1 ON'
+  - expect-pin: { part-id: esp, pin: 26, value: 0 }
+
+  # вимкнути й одразу знову ввімкнути → відмова (захист контактів)
+  - write-serial: "1 off\n"
+  - wait-serial: 'Relay 1 OFF'
+  - write-serial: "1 on\n"
+  - wait-serial: 'Relay 1: too soon'
+  - expect-pin: { part-id: esp, pin: 26, value: 1 }
+
+  # через 600 мс — можна
+  - delay: 600ms
+  - write-serial: "1 on\n"
+  - wait-serial: 'Relay 1 ON'
+  - expect-pin: { part-id: esp, pin: 26, value: 0 }
+
+  # канал 2, потім «вимкнути все»
+  - write-serial: "2 on\n"
+  - wait-serial: 'Relay 2 ON'
+  - expect-pin: { part-id: esp, pin: 27, value: 0 }
+  - write-serial: "off\n"
+  - wait-serial: 'Relay 2 OFF'
+  - expect-pin: { part-id: esp, pin: 26, value: 1 }
+  - expect-pin: { part-id: esp, pin: 27, value: 1 }
+
+  # автовимкнення через 10 с
+  - delay: 600ms
+  - write-serial: "2 on\n"
+  - wait-serial: 'Relay 2 ON'
+  - wait-serial: 'Relay 2 auto-off'
+  - expect-pin: { part-id: esp, pin: 27, value: 1 }
