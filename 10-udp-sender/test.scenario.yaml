@@ -1,0 +1,9 @@
+name: UDP sender (Wokwi-GUEST -> host.wokwi.internal:9000)
+version: 1
+author: Pavlo
+steps:
+  - wait-serial: 'Ready'
+  - wait-serial: 'Connected, IP 10.'
+  - wait-serial: 'Monitor at '
+  - wait-serial: 'Sent seq=0..2, failed=0,'
+  - wait-serial: 'Sent seq=3..5, failed=0,'
