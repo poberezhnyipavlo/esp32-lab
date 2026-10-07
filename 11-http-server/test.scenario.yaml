@@ -1,0 +1,9 @@
+name: HTTP server (Wokwi-GUEST, firmware default host)
+version: 1
+author: Pavlo
+steps:
+  - wait-serial: '11-http-server'
+  - wait-serial: 'Monitor host: 10.13.37.1 (firmware)'
+  - wait-serial: 'Ready'
+  - wait-serial: 'Connected, IP 10.'
+  - wait-serial: 'HTTP server on http://10.'
