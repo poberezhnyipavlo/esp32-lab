@@ -5,7 +5,7 @@
 #include <array>
 #include <optional>
 
-#include "MetricProtocol.h"
+#include <metric_protocol/MetricProtocol.h>
 #include "SignalQuality.h"
 #include "WifiKeeper.h"
 
