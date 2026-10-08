@@ -1,0 +1,9 @@
+name: TCP sender (Wokwi-GUEST -> gateway 10.13.37.1:9001)
+version: 1
+author: Pavlo
+steps:
+  - wait-serial: '12-tcp-mode'
+  - wait-serial: 'Ready'
+  - wait-serial: 'Connected, IP 10.'
+  - wait-serial: 'Monitor at 10.13.37.1:9002'
+  - wait-serial: 'TCP: connecting to 10.13.37.1:9002 (attempt 1)...'
