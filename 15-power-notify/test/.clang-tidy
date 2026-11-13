@@ -1,0 +1,9 @@
+InheritParentConfig: true
+Checks: >
+  -cppcoreguidelines-avoid-goto,
+  -cert-err58-cpp,
+  -cppcoreguidelines-special-member-functions,
+  -cppcoreguidelines-owning-memory,
+  -cppcoreguidelines-avoid-non-const-global-variables,
+  -modernize-use-trailing-return-type,
+  -readability-function-cognitive-complexity

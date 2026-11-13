@@ -1,0 +1,8 @@
+name: Power notify (Wokwi-GUEST, fake token)
+version: 1
+author: Pavlo
+steps:
+  - wait-serial: 'Reset reason: POWERON'
+  - wait-serial: 'Connected, IP 10.'
+  - wait-serial: 'Sending to Telegram...'
+  - wait-serial: 'Telegram rejected the request: HTTP 4'   # 401 або 404: TLS і HTTPS дійшли до Telegram
