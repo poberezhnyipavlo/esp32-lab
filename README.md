@@ -39,14 +39,22 @@ repository shows how I learn: small steps, tests, measurements on real hardware,
 | 11 | [http-server](11-http-server) | small HTTP API, token check in constant time, settings in NVS | ✅ | ✅ | ✅ |
 | 12 | [tcp-mode](12-tcp-mode) | persistent TCP with reconnect, measuring how long network calls block, half-open connections | ✅ | ✅ | ✅ |
 | 13 | [freertos-tasks](13-freertos-tasks) | sampling and networking in separate FreeRTOS tasks, ring buffer under a mutex, ThreadSanitizer | ✅ | ✅ | ✅ |
+| 14 | [esp32-monitoring-node](https://github.com/poberezhnyipavlo/esp32-monitoring-node) | grew into its own repository, see below | ✅ | ✅ | ✅ |
+| 15 | [power-notify](15-power-notify) | HTTPS with certificate verification (CA bundle), Telegram Bot API, reset reason, retry policy by HTTP status | ✅ | ✅ | ✅ |
 
 ## Related repositories
 
+Projects 10–13 grew into a three-repository system:
+
+- [esp32-monitoring-node](https://github.com/poberezhnyipavlo/esp32-monitoring-node): the final device built on
+  these projects (step 14). Three FreeRTOS tasks, DHT11 data over TCP with HMAC-SHA256-signed lines, an RGB status
+  LED and an OLED, a black box (task watchdog, reset reason, breadcrumbs in RTC memory), and CI with 119 unit tests,
+  linters and a Wokwi simulation.
 - [metric-protocol](https://github.com/poberezhnyipavlo/metric-protocol): the wire format used from project 10 on,
-  extracted into a versioned package. The ESP32 projects pull it with PlatformIO `lib_deps` (`#v2.0.0`), the
-  desktop receiver with CMake `FetchContent`. Version 2 adds device id, boot id and sample age.
-- **esp32-monitoring-node** (next, in progress): the final device built on these projects. It reads temperature,
-  humidity and motion, drives an alert LED and an OLED through an event bus, and has CI with unit tests and linters.
+  extracted into a versioned package (now 3.1: metrics, node event logs and line signatures). The ESP32 projects pull
+  it with PlatformIO `lib_deps`, the receiver with CMake `FetchContent`.
+- [monitor](https://github.com/poberezhnyipavlo/monitor): the receiver. Checks the signature of every line, stores
+  data in LMDB and serves it over gRPC.
 
 ## A few things learned the hard way
 
